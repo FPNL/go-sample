@@ -6,7 +6,7 @@ import (
 
 	"git.star-link-oa.com/pkg/decryptor/v2"
 
-	"oltp/pkg/tools"
+	"github.com/fpnl/go-sample/pkg/tools"
 )
 
 const debug = "debug"

@@ -10,12 +10,12 @@ import (
 
 	"github.com/google/wire"
 
-	"oltp/biz"
-	"oltp/conf"
-	"oltp/data"
-	"oltp/server"
-	"oltp/server/middleware"
-	"oltp/service"
+	"github.com/fpnl/go-sample/biz"
+	"github.com/fpnl/go-sample/conf"
+	"github.com/fpnl/go-sample/data"
+	"github.com/fpnl/go-sample/server"
+	"github.com/fpnl/go-sample/server/middleware"
+	"github.com/fpnl/go-sample/service"
 )
 
 // initApp init kratos application.

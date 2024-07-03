@@ -7,13 +7,13 @@
 package main
 
 import (
+	"github.com/fpnl/go-sample/biz"
+	"github.com/fpnl/go-sample/conf"
+	"github.com/fpnl/go-sample/data"
+	"github.com/fpnl/go-sample/server"
+	"github.com/fpnl/go-sample/server/middleware"
+	"github.com/fpnl/go-sample/service"
 	"log/slog"
-	"oltp/biz"
-	"oltp/conf"
-	"oltp/data"
-	"oltp/server"
-	"oltp/server/middleware"
-	"oltp/service"
 )
 
 // Injectors from wire.go:

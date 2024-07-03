@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"oltp/conf"
-	"oltp/pkg/logger"
+	"github.com/fpnl/go-sample/conf"
+	"github.com/fpnl/go-sample/pkg/logger"
 )
 
 const (

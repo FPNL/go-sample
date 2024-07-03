@@ -4,9 +4,9 @@ import (
 	"context"
 	"log/slog"
 
-	"oltp/api"
-	"oltp/biz"
-	"oltp/pkg/logger"
+	"github.com/fpnl/go-sample/api"
+	"github.com/fpnl/go-sample/biz"
+	"github.com/fpnl/go-sample/pkg/logger"
 )
 
 func NewGreeterService(greeterUsecase *biz.GreeterUsecase, log *slog.Logger) *Greeter {

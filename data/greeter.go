@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	"oltp/biz"
+	"github.com/fpnl/go-sample/biz"
 )
 
 func NewGreeterRepo(data *Data, log *slog.Logger) biz.GreeterRepo {

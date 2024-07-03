@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	"oltp/pkg/tools"
+	"github.com/fpnl/go-sample/pkg/tools"
 )
 
 func NewDefaultCodec() *DefaultCodec {

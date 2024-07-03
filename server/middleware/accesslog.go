@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
 
-	"oltp/pkg/tools"
+	"github.com/fpnl/go-sample/pkg/tools"
 )
 
 func NewAccessLog(log *slog.Logger) (*AccessLog, func(), error) {

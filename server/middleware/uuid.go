@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"oltp/pkg/logger"
-	"oltp/pkg/tools"
+	"github.com/fpnl/go-sample/pkg/logger"
+	"github.com/fpnl/go-sample/pkg/tools"
 )
 
 const RequestIDHeaderKey = "X-Request-Id"

@@ -11,7 +11,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"oltp/conf"
+	"github.com/fpnl/go-sample/conf"
 )
 
 var ProviderSet = wire.NewSet(

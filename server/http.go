@@ -8,10 +8,10 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 
-	"oltp/api"
-	"oltp/conf"
-	"oltp/server/middleware"
-	"oltp/service"
+	"github.com/fpnl/go-sample/api"
+	"github.com/fpnl/go-sample/conf"
+	"github.com/fpnl/go-sample/server/middleware"
+	"github.com/fpnl/go-sample/service"
 )
 
 func NewHTTPServer(

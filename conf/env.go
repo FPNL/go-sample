@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"oltp/pkg/tools"
+	"github.com/fpnl/go-sample/pkg/tools"
 )
 
 type Bootstrap struct {
@@ -25,7 +25,7 @@ type Server struct {
 	}
 	IPWhitelist struct {
 		Internal []string
-		Uu       []string
+		Outsider []string
 	}
 }
 

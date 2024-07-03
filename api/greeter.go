@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"oltp/pkg/tools"
+	"github.com/fpnl/go-sample/pkg/tools"
 )
 
 const (
