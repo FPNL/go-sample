@@ -1,4 +1,4 @@
-module oltp
+module github.com/fpnl/go-sample
 
 go 1.22
 
