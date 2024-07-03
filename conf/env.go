@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"time"
+	"oltp/pkg/tools"
 )
 
 type Bootstrap struct {
@@ -21,7 +21,7 @@ type Server struct {
 	HTTP struct {
 		Network string
 		Addr    string
-		Timeout time.Duration
+		Timeout tools.Duration
 	}
 	IPWhitelist struct {
 		Internal []string
@@ -34,8 +34,8 @@ type Data struct {
 		URL    string
 		Port   string
 		User   string
-		DbName string
 		Pwd    string
+		DbName string
 		Conn   int
 	}
 }

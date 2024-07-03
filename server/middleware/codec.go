@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	"oltp/pkg/axiom"
+	"oltp/pkg/tools"
 )
 
 func NewDefaultCodec() *DefaultCodec {
@@ -17,8 +17,8 @@ func NewDefaultCodec() *DefaultCodec {
 type DefaultCodec struct{}
 
 func (c *DefaultCodec) Mid(allowPaths ...string) gin.HandlerFunc {
-	return axiom.Mid(allowPaths, func(c *gin.Context) {
-		c.Set(axiom.CodecCtx, c)
+	return tools.Mid(allowPaths, func(ctx *gin.Context) {
+		ctx.Set(tools.CodecCtx, c)
 	})
 }
 
@@ -59,6 +59,6 @@ func (c *DefaultCodec) Result(ctx *gin.Context, out any) error {
 }
 
 func (c *DefaultCodec) Catch(ctx *gin.Context, err error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

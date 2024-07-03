@@ -1,11 +1,15 @@
 package data
 
 import (
+	"database/sql"
 	"fmt"
+	"log/slog"
 
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 	"go-micro.dev/v4/logger"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 
 	"oltp/conf"
 )
@@ -13,14 +17,32 @@ import (
 var ProviderSet = wire.NewSet(
 	NewData,
 	NewSQLX,
+	NewGORM,
 
 	NewGreeterRepo,
 )
 
 // Data 存取資料，包含 mysql, redis...
 type Data struct {
-	db *sqlx.DB
+	logger *slog.Logger
+	db     *gorm.DB
 	// cache redis.UniversalClient
+}
+
+func NewGORM(conf *conf.Data) (*gorm.DB, error) {
+	sqlDB, err := sql.Open("mysql", source(conf)+"?parseTime=true&loc=Local")
+	if err != nil {
+		return nil, fmt.Errorf("sql.Open() : %v", err)
+	}
+
+	gormDB, err := gorm.Open(mysql.New(mysql.Config{
+		Conn: sqlDB,
+	}), &gorm.Config{})
+	if err != nil {
+		return nil, fmt.Errorf("gorm.Open() : %v", err)
+	}
+
+	return gormDB, nil
 }
 
 func NewSQLX(conf *conf.Data) *sqlx.DB {
@@ -41,13 +63,15 @@ func NewSQLX(conf *conf.Data) *sqlx.DB {
 }
 
 // NewData .
-func NewData(db *sqlx.DB) (*Data, func(), error) {
+func NewData(db *gorm.DB, logger *slog.Logger) (*Data, func(), error) {
 	cleanup := func() {
-		_ = db.Close()
+		db, _ := db.DB()
+		db.Close()
 		logger.Info("closing the data resources")
 	}
 	return &Data{
-		db: db,
+		db:     db,
+		logger: logger,
 	}, cleanup, nil
 }
 

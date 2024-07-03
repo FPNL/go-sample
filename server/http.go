@@ -15,14 +15,23 @@ import (
 )
 
 func NewHTTPServer(
+	cp *conf.Project,
 	cs *conf.Server,
 	serviceGreeter *service.Greeter,
 	midDefaultCodec *middleware.DefaultCodec,
 	midIpWhitelist *middleware.IpWhitelist,
+	midRequestUUID *middleware.RequestUUID,
+	midAccessLog *middleware.AccessLog,
 ) *http.Server {
-	r := gin.Default()
+	if !cp.IsDebug {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	r := gin.New()
 	r.UseH2C = true
 
+	r.Use(midRequestUUID.Mid())
+	r.Use(midAccessLog.Mid())
 	r.Use(midDefaultCodec.Mid())
 
 	// mid 範例 1
@@ -31,15 +40,17 @@ func NewHTTPServer(
 
 	// mid 範例 2
 	// 限制在特定 API
-	r.Use(midIpWhitelist.Mid(api.GetGreeter))
+	// r.Use(midIpWhitelist.Mid(api.GetGreeter))
 
 	// mid 範例 3
 	// 限制在特定的 server
-	api.RegisterGinGreeterServer(r, serviceGreeter, midIpWhitelist.Mid())
+	// api.RegisterGinGreeterServer(r, serviceGreeter, midIpWhitelist.Mid())
 
 	// mid 範例 4
 	// 限制在特定的 server 中的特定 API
-	api.RegisterGinGreeterServer(r, serviceGreeter, midIpWhitelist.Mid(api.GetGreeter))
+	// api.RegisterGinGreeterServer(r, serviceGreeter, midIpWhitelist.Mid(api.GetGreeter))
+
+	api.RegisterGinGreeterServer(r, serviceGreeter)
 
 	return &http.Server{
 		Addr:         cs.HTTP.Addr,

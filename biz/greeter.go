@@ -13,13 +13,13 @@ type GreeterRepo interface {
 	SayHi(ctx context.Context) string
 }
 
-func NewGreeterUsecase(repo GreeterRepo, logger slog.Logger) *GreeterUsecase {
+func NewGreeterUsecase(repo GreeterRepo, logger *slog.Logger) *GreeterUsecase {
 	return &GreeterUsecase{repo: repo, logger: logger}
 }
 
 type GreeterUsecase struct {
 	repo   GreeterRepo
-	logger slog.Logger
+	logger *slog.Logger
 }
 
 func (s GreeterUsecase) Hello(ctx context.Context, name string) string {

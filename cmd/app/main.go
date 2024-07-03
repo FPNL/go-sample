@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"oltp/conf"
+	"oltp/pkg/logger"
 )
 
 const (
@@ -29,15 +30,15 @@ func main() {
 		panic(err)
 	}
 
-	// TODO: logger
+	log := logger.NewLogger()
 
-	app, cleanup, err := initApp(config.Server, config.Data, slog.Logger{})
+	app, cleanup, err := initApp(config.Project, config.Server, config.Data, log)
 	if err != nil {
 		panic(err)
 	}
 	defer cleanup()
 
-	if err = app.Run(); err != nil {
+	if err = app.Run(log); err != nil {
 		panic(err)
 	}
 }
@@ -56,7 +57,8 @@ func (receiver *app) New(server *http.Server) app {
 	return app{server}
 }
 
-func (receiver *app) Run() error {
+func (receiver *app) Run(log *slog.Logger) error {
+	log.Info("啟動 APP", "Addr", receiver.Server.Addr)
 	return receiver.Server.ListenAndServe()
 }
 

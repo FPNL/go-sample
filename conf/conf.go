@@ -6,7 +6,7 @@ import (
 
 	"git.star-link-oa.com/pkg/decryptor/v2"
 
-	"oltp/pkg/axiom"
+	"oltp/pkg/tools"
 )
 
 const debug = "debug"
@@ -48,11 +48,11 @@ func InitAPI(confPath string) (*Bootstrap, error) {
 // LoadBootstrapConfig 由於 devops 給設定檔的方式為，把設定內容 encode to json 然後設定到環境變數 envConfig
 // 但是在本地開發還是以 env.json 為主，所以這邊要做一個判斷，如果有 envConfig 就用 envConfig，沒有就用 env.json
 func loadBootstrapConfig(confPath string, c any) (err error) {
-	if err = axiom.LoadFromEnv("envConfig", "json", c); err == nil {
+	if err = tools.LoadFromEnv("envConfig", "json", c); err == nil {
 		return nil
 	}
 
-	if err = axiom.LoadFromFile(confPath, c); err != nil {
+	if err = tools.LoadFromFile(confPath, c); err != nil {
 		return fmt.Errorf("load config from file fail: %w", err)
 	}
 

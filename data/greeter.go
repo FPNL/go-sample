@@ -7,10 +7,10 @@ import (
 	"oltp/biz"
 )
 
-func NewGreeterRepo(data *Data, log slog.Logger) biz.GreeterRepo {
+func NewGreeterRepo(data *Data, log *slog.Logger) biz.GreeterRepo {
 	return &greeterRepo{
 		data,
-		log,
+		*log,
 	}
 }
 

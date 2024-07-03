@@ -19,20 +19,30 @@ import (
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(confServer *conf.Server, confData *conf.Data, logger slog.Logger) (*app, func(), error) {
-	db := data.NewSQLX(confData)
-	dataData, cleanup, err := data.NewData(db)
+func initApp(project *conf.Project, confServer *conf.Server, confData *conf.Data, logger *slog.Logger) (*app, func(), error) {
+	db, err := data.NewGORM(confData)
+	if err != nil {
+		return nil, nil, err
+	}
+	dataData, cleanup, err := data.NewData(db, logger)
 	if err != nil {
 		return nil, nil, err
 	}
 	greeterRepo := data.NewGreeterRepo(dataData, logger)
 	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeter := service.NewGreeterService(greeterUsecase)
+	greeter := service.NewGreeterService(greeterUsecase, logger)
 	defaultCodec := middleware.NewDefaultCodec()
 	ipWhitelist := middleware.NewIpWhitelist()
-	httpServer := server.NewHTTPServer(confServer, greeter, defaultCodec, ipWhitelist)
+	requestUUID := middleware.NewRequestUUID(logger)
+	accessLog, cleanup2, err := middleware.NewAccessLog(logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	httpServer := server.NewHTTPServer(project, confServer, greeter, defaultCodec, ipWhitelist, requestUUID, accessLog)
 	mainApp := newApp(httpServer)
 	return mainApp, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }

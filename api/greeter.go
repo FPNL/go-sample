@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"oltp/pkg/axiom"
+	"oltp/pkg/tools"
 )
 
 const (
@@ -27,20 +27,20 @@ func RegisterGinGreeterServer(router gin.IRouter, service GreeterServer, middlew
 
 // GreetRequest 按需求修改
 type GreetRequest struct {
-	Name string `json:"name"`
+	Name string `json:"name" form:"name"`
 }
 
 // GreetResponse 按需求修改，如果是 text/plain 則改成 string
 type GreetResponse struct {
-	Message string `json:"message"`
+	Message string `json:"message" form:"message"`
 }
 
 // greeterHandler
 func greeterHandler(server GreeterServer) gin.HandlerFunc {
-	return axiom.Handle(func(ctx *gin.Context, codec axiom.Codec) (err error) {
+	return tools.Handle(func(ctx *gin.Context, codec tools.Codec) (err error) {
 		// 這裏應為固定
-		var in *GreetRequest
-		var out *GreetResponse
+		var in = &GreetRequest{}
+		var out = &GreetResponse{}
 
 		// 這行按需求修改
 		if err = codec.Bind(ctx, &in); err != nil {

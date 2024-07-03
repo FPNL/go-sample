@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 
-	"oltp/pkg/axiom"
+	"oltp/pkg/tools"
 )
 
 func NewIpWhitelist() *IpWhitelist {
@@ -14,7 +14,7 @@ type IpWhitelist struct {
 }
 
 func (m *IpWhitelist) Mid(allowPaths ...string) gin.HandlerFunc {
-	return axiom.Mid(allowPaths, func(c *gin.Context) {
+	return tools.Mid(allowPaths, func(c *gin.Context) {
 
 	})
 }

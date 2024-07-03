@@ -1,3 +1,4 @@
 .idea
 conf/**/*.json
 !conf/**/env.json
+log

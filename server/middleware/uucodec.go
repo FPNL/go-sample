@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	"oltp/pkg/axiom"
+	"oltp/pkg/tools"
 )
 
 /*
@@ -18,15 +18,15 @@ func NewUUCodec() *UUCodec {
 }
 
 func Mid(allowPaths ...string) gin.HandlerFunc {
-	return axiom.Mid(allowPaths, func(c *gin.Context) {
-		c.Set(axiom.CodecCtx, &UUCodec{})
+	return tools.Mid(allowPaths, func(ctx *gin.Context) {
+		ctx.Set(tools.CodecCtx, &UUCodec{})
 	})
 }
 
 type UUCodec struct{}
 
 func (c *UUCodec) Catch(ctx *gin.Context, err error) {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
