@@ -22,6 +22,7 @@ func NewHTTPServer(
 	midIpWhitelist *middleware.IpWhitelist,
 	midRequestUUID *middleware.RequestUUID,
 	midAccessLog *middleware.AccessLog,
+	midPanicLog *middleware.Recovery,
 ) *http.Server {
 	if !cp.IsDebug {
 		gin.SetMode(gin.ReleaseMode)
@@ -31,6 +32,7 @@ func NewHTTPServer(
 	r.UseH2C = true
 
 	r.Use(midRequestUUID.Mid())
+	r.Use(midPanicLog.Mid())
 	r.Use(midAccessLog.Mid())
 	r.Use(midDefaultCodec.Mid())
 

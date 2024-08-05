@@ -1,10 +1,7 @@
 package main
 
 import (
-	"context"
 	"flag"
-	"log/slog"
-	"net/http"
 
 	"github.com/fpnl/go-sample/conf"
 	"github.com/fpnl/go-sample/pkg/logger"
@@ -30,9 +27,12 @@ func main() {
 		panic(err)
 	}
 
-	log := logger.NewLogger()
+	log, err := logger.NewLogger(config.Log, config.Project)
+	if err != nil {
+		panic(err)
+	}
 
-	app, cleanup, err := initApp(config.Project, config.Server, config.Data, log)
+	app, cleanup, err := initApp(config.Project, config.Server, config.Data, config.Log, log)
 	if err != nil {
 		panic(err)
 	}
@@ -41,28 +41,4 @@ func main() {
 	if err = app.Run(log); err != nil {
 		panic(err)
 	}
-}
-
-func newApp(server *http.Server) *app {
-	return &app{
-		server,
-	}
-}
-
-type app struct {
-	*http.Server
-}
-
-func (receiver *app) New(server *http.Server) app {
-	return app{server}
-}
-
-func (receiver *app) Run(log *slog.Logger) error {
-	log.Info("啟動 APP", "Addr", receiver.Server.Addr)
-	return receiver.Server.ListenAndServe()
-}
-
-// Stop gracefully stops the application
-func (receiver *app) Stop() error {
-	return receiver.Server.Shutdown(context.TODO())
 }

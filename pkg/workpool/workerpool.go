@@ -1,4 +1,4 @@
-package tools
+package workpool
 
 func NewWorkerPool[T any](numWorkers int, jobs <-chan T, process func(T)) {
 	var workers = make(chan struct{}, numWorkers)

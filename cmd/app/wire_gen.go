@@ -10,6 +10,7 @@ import (
 	"github.com/fpnl/go-sample/biz"
 	"github.com/fpnl/go-sample/conf"
 	"github.com/fpnl/go-sample/data"
+	"github.com/fpnl/go-sample/pkg/tools"
 	"github.com/fpnl/go-sample/server"
 	"github.com/fpnl/go-sample/server/middleware"
 	"github.com/fpnl/go-sample/service"
@@ -19,7 +20,7 @@ import (
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(project *conf.Project, confServer *conf.Server, confData *conf.Data, logger *slog.Logger) (*app, func(), error) {
+func initApp(project *conf.Project, confServer *conf.Server, confData *conf.Data, log *conf.Log, logger *slog.Logger) (*tools.App, func(), error) {
 	db, err := data.NewGORM(confData)
 	if err != nil {
 		return nil, nil, err
@@ -34,14 +35,21 @@ func initApp(project *conf.Project, confServer *conf.Server, confData *conf.Data
 	defaultCodec := middleware.NewDefaultCodec()
 	ipWhitelist := middleware.NewIpWhitelist()
 	requestUUID := middleware.NewRequestUUID(logger)
-	accessLog, cleanup2, err := middleware.NewAccessLog(logger)
+	accessLog, cleanup2, err := middleware.NewAccessLog(logger, log)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	httpServer := server.NewHTTPServer(project, confServer, greeter, defaultCodec, ipWhitelist, requestUUID, accessLog)
-	mainApp := newApp(httpServer)
-	return mainApp, func() {
+	recovery, cleanup3, err := middleware.NewRecovery(logger, log)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	httpServer := server.NewHTTPServer(project, confServer, greeter, defaultCodec, ipWhitelist, requestUUID, accessLog, recovery)
+	app := tools.NewApp(httpServer)
+	return app, func() {
+		cleanup3()
 		cleanup2()
 		cleanup()
 	}, nil

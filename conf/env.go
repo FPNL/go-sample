@@ -8,6 +8,14 @@ type Bootstrap struct {
 	Project *Project
 	Server  *Server
 	Data    *Data
+	Log     *Log
+}
+
+type Log struct {
+	OutPath    string
+	AccessPath string
+	PanicPath  string
+	Stdout     bool
 }
 
 type Project struct {

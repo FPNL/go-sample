@@ -9,11 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 	sloggin "github.com/samber/slog-gin"
 
+	"github.com/fpnl/go-sample/conf"
 	"github.com/fpnl/go-sample/pkg/tools"
 )
 
-func NewAccessLog(log *slog.Logger) (*AccessLog, func(), error) {
-	file, err := os.OpenFile("./log/access.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+func NewAccessLog(log *slog.Logger, cl *conf.Log) (*AccessLog, func(), error) {
+	file, err := os.OpenFile(cl.AccessPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open access.log: %w", err)
 	}
