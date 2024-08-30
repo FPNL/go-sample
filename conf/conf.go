@@ -4,8 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"git.star-link-oa.com/pkg/decryptor/v2"
-
 	"github.com/fpnl/go-sample/pkg/tools"
 )
 
@@ -30,18 +28,6 @@ func InitAPI(confPath string) (*Bootstrap, error) {
 		return nil, fmt.Errorf("validate config fail: %w", err)
 	}
 
-	if !c.Project.IsDebug {
-		if err = dec(c.Project.DecryptorPath, []*string{
-			&c.Data.Mysql.URL,
-			&c.Data.Mysql.Port,
-			&c.Data.Mysql.User,
-			&c.Data.Mysql.Pwd,
-			&c.Data.Mysql.DbName,
-		}); err != nil {
-			return nil, fmt.Errorf("dec env fail: %w", err)
-		}
-	}
-
 	return c, nil
 }
 
@@ -62,19 +48,6 @@ func loadBootstrapConfig(confPath string, c any) (err error) {
 func validate(c *Bootstrap) error {
 	if c.Server.HTTP.Addr == "" {
 		return errors.New("config http's addr is empty")
-	}
-
-	return nil
-}
-
-func dec(decryptorPath string, data []*string) error {
-	d, err := decryptor.NewAxiomGoPluginDecryptor[string](decryptorPath)
-	if err != nil {
-		return fmt.Errorf("decryptor.NewAxiomGoPluginDecryptor() : %w", err)
-	}
-
-	if err = d.Decrypt(data...); err != nil {
-		return fmt.Errorf("d.Decrypt() : %w", err)
 	}
 
 	return nil
